@@ -1,0 +1,33 @@
+
+
+
+/*This ia a descriptor connector app coded in JSON that is used to connect a module wriiten in php to an
+online platform; the module-a server to be hosted on my local machine- is not attached, nor is the module that attaches it to
+the atlassian portal
+*/
+
+{
+$schema:"JSON-schema-org"
+$id:"https://bitbucket.org/miadevsecops/descriptor_connector_repo/src/master/descriptor-app.schema.json"
+title: "Descriptor app"
+description: "Descriptor app to connect to connector app"
+type: "object"
+properties:{
+"modules": {}
+"key": "Mias-descriptor-app"{"type": "string",
+"description": "key that identifies descriptor app"
+}
+authentication:{
+JWT:{ type: string,
+description: "authentication method"
+}
+}
+baseURL: "https://bitbucket.org/miadevsecops/descriptor_connector_repo/connect/jira"'
+"vender": {
+"name": "miapaulin"
+"url":"https://miapaulin.atlassian.net/jira/software/c/projects/DTD/boards/3?selectedIssue=DTD-2"
+
+               }                
+             }
+         required:["authentication", "key", "baseURL"]
+}
