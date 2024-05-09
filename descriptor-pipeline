@@ -1,0 +1,88 @@
+####This is a pipeline for my connector-descriptor app###
+###starts with definitions for bulding,testing,staging, deploying###
+###Will add configurations for scaning/securing of files###
+###will create files to store result inside of created docker image###
+###uses pipes for scripts###
+###add and configure environmental variables: look up the ones I was trying to create###
+###add manual triggers to deployments spaces###
+###used sonar for building and testing###
+###add environmental variables for deployment (one for test, one(more)for staging and one for production)
+###added pipeline code and added definitions in pipeline###
+###add artifcat integration###
+###note on deployment-might deploy to artifact(explaining it wrong) instead of docker cluster)
+
+
+###declare env variables for sonar pipes here;  use lambdas to create values and hope no one see pipeline implementation
+echo $Host_URL => "https://bitbucket.org/miadevsecops/descriptor_connector_repo/src/master/descriptor-pipeline?mode=edit&at=master"
+echo $Alicia => "Spine"
+image: atlassian/default-image:latest
+ 
+definitions:
+	###definition 1: build, test and deploy to testing environment###
+	steps:
+		-step: &build-n-test
+			-name: "Build-test"
+				-script:
+				   echo $Testing_Environment
+				   #added script for build and one for test(use pipes)
+				   
+				   - pipe: sonarsource/sonarqube-scan:1.2.0
+  						variables:
+    						SONAR_HOST_URL: ${Host_URL} 
+    						SONAR_TOKEN: ${Alicia}  
+				   -deployment: "testing"
+				  		-trigger: "manual"
+				  	-script:
+				   `	- pipe: atlassian/serverless-deploy:1.2.0
+				   ###ask if environment created goes before the script that runs in that environemt###
+				   echo "Test folder"
+
+###definition 2: Staging deployment###
+###might modify to put deployment to folder here###
+		-step: &deployment-2-staging"
+			-name: "deployment"
+			  -deployment: "staging"
+				-trigger: "manual"
+				  -script: 
+				 		echo $Staging_Environment
+				  -script:
+				 	 - pipe: atlassian/serverless-deploy:1.2.0
+				
+				 ###find pipe for deployment into staging###
+					echo "Deployment to staging"
+
+### definition 3: production deployment###
+		-step: &deploy-2-production
+			-name: "Deploy-2-Production"
+				-deployment: "production"
+				 	-trigger: "manual"
+				-script:
+				 	echo $Production_Environment
+					- pipe: atlassian/serverless-deploy:1.2.0
+				  ###used pipe for deployment###
+					echo "Production Deployment" 
+### added manual triggers to deployment steps###					
+
+
+###see if it can go to main branch and if I put the develop flag if it will run only on the descriptor app###
+Pipeline:
+	-default:
+	###deploys to test envirnoment; created environmental variablre###
+		###-develop:  might have referred to deverlopment pipeline instead of devrelopment step###
+		   -step: *build-test
+		 ###deploy to staging environment; created environmental variable ###
+		 -deployment:
+				-step: *deployment-2-staging
+		###deploy to production environment; created environmental variable ###
+		-deployment:
+				- step: *deploy-2-production
+					
+				
+				
+				
+				
+				
+				
+				
+				
+				
