@@ -1,0 +1,8 @@
+body{background-image:url(tourcruise2.jpg); background-size:100%;
+    background-repeat: no-repeat;
+     }
+ figure{display:flex;flex-direction:row; background-repeat: repeat-x; background-color:white;padding: 1.2rem 3rem 0em 3rem; 
+     margin:-7px -6.8px .5px -6.8px }
+  .logo{font-size:50px;}
+  .link-wrapper{display:flex; flex-direction:column;justify-content: space-around; 
+     background-color: purple; height: 980px; float:right; padding-right:1em;margin-right:-.5em;} 
